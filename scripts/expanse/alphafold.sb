@@ -1,0 +1,60 @@
+#!/bin/bash
+#SBATCH --job-name alphafold-v2.2.0
+### Changing XYZ123 to your allocation ID
+#SBATCH --account=XYZ123
+#SBATCH --time=08:00:00
+#SBATCH --gpus=1
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=8
+#SBATCH --partition=gpu-shared
+#SBATCH --mem=40G
+
+#set the environment PATH
+export PYTHONNOUSERSITE=True
+module reset
+module load singularitypro
+ALPHAFOLD_DATA_PATH=/expanse/projects/qstore/data/alphafold-v2.2.0
+ALPHAFOLD_MODELS=/expanse/projects/qstore/data/alphafold-v2.2.0/params
+
+## Copy input to node local scratch
+cp input.fasta /scratch/$USER/job_$SLURM_JOBID
+cp -r /expanse/projects/qstore/data/alphafold-v2.2.0/uniclust30/uniclust30_2018_08 /scratch/$USER/job_$SLURM_JOBID/
+cd /scratch/$USER/job_$SLURM_JOBID
+mkdir bfd
+cp /expanse/projects/qstore/data/alphafold-v2.2.0/bfd/*index bfd/
+cp /expanse/projects/qstore/data/alphafold-v2.2.0/bfd/bfd_metaclust_clu_complete_id30_c90_final_seq.sorted_opt_hhm.ffdata bfd/
+cp /expanse/projects/qstore/data/alphafold-v2.2.0/bfd/bfd_metaclust_clu_complete_id30_c90_final_seq.sorted_opt_cs219.ffdata bfd/
+cd bfd
+ln -s /expanse/projects/qstore/data/alphafold-v2.2.0/bfd/bfd_metaclust_clu_complete_id30_c90_final_seq.sorted_opt_a3m.ffdata
+cd ../
+mkdir alphafold_output
+#Run the command
+## For options do:
+## module load singularitypro
+## export OMP_NUM_THREADS=1
+## singularity run /cm/shared/apps/containers/singularity/alphafold/alphafold-v2.2.0.sif --helpfull
+singularity run --nv \
+ -B /expanse/lustre \
+ -B /expanse/projects \
+ -B /scratch \
+ -B $ALPHAFOLD_DATA_PATH:/data \
+ -B $ALPHAFOLD_MODELS \
+ /cm/shared/apps/containers/singularity/alphafold/alphafold-v2.2.0.sif \
+ --fasta_paths=/scratch/$USER/job_$SLURM_JOBID/input.fasta \
+ --uniref90_database_path=/data/uniref90/uniref90.fasta \
+ --data_dir=/data \
+ --mgnify_database_path=/data/mgnify/mgy_clusters.fa \
+ --bfd_database_path=/scratch/$USER/job_$SLURM_JOBID/bfd/bfd_metaclust_clu_complete_id30_c90_final_seq.sorted_opt \
+ --uniclust30_database_path=/scratch/$USER/job_$SLURM_JOBID/uniclust30_2018_08/uniclust30_2018_08 \
+ --pdb70_database_path=/data/pdb70/pdb70 \
+ --template_mmcif_dir=/data/pdb_mmcif/mmcif_files \
+ --obsolete_pdbs_path=/data/pdb_mmcif/obsolete.dat \
+ --max_template_date=2020-05-14 \
+ --output_dir=/scratch/$USER/job_$SLURM_JOBID/alphafold_output \
+ --use_gpu_relax=True \
+ --model_preset=monomer
+
+### Copy back results
+
+tar -cvf $SLURM_SUBMIT_DIR/alphafold_output.tar alphafold_output
