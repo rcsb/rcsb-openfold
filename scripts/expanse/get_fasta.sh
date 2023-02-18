@@ -13,7 +13,7 @@ outdir=$3
 resp=$(curl 'https://data.rcsb.org/graphql' --data-raw '{"query":"{\n  entry(entry_id: \"'"$pdb"'\"){\n    polymer_entities {\n      entity_poly {\n        pdbx_seq_one_letter_code_can\n      }\n    }\n  }\n}","variables":null}' --compressed)
 seq=$(echo "$resp" |  jq -r .data.entry.polymer_entities[0].entity_poly.pdbx_seq_one_letter_code_can)
 
-echo "" > $outdir/$pdb.fasta
+rm $outdir/$pdb.fasta
 for i in $(seq 1 "$sto")
 do
   echo ">$pdb" >> $outdir/$pdb.fasta
