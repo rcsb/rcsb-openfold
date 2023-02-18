@@ -13,4 +13,6 @@
 #SBATCH --partition=gpu-shared
 #SBATCH --mem=40G
 
+echo "Start: $(date)"
 /home/jmduarte/run_of_inference.sh
+echo "Done:  $(date)"
