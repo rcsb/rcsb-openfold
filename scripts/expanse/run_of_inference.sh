@@ -48,5 +48,7 @@ else
       --output_dir $outDir \
       --model_device "cuda:0" \
       --config_preset "model_1_ptm" \
+      --save_outputs \
+      --cif_output \
       --openfold_checkpoint_path $dataRoot/openfold_params/finetuning_ptm_2.pt
 fi
