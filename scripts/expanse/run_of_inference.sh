@@ -3,10 +3,10 @@
 # With no arguments it will assume we are in precomputed alignments mode
 # With argument --with-aln it will compute alignments
 
-ofDir=/home/jmduarte/git/openfold
-dataRoot=/expanse/lustre/scratch/jmduarte/temp_project/of_data/
-inDir=/home/jmduarte/input_sequences
-outDir=/home/jmduarte/output_models
+ofDir=/home/jose/git/openfold
+dataRoot=/data/openfold
+inDir=/home/jose/input_sequences
+outDir=/home/jose/output_models
 
 # without this it crashes (in expanse login node)
 #export OMP_NUM_THREADS=1
@@ -46,9 +46,9 @@ else
       $dataRoot/pdb_mmcif/mmcif_files/ \
       --use_precomputed_alignments $outDir/alignments/ \
       --output_dir $outDir \
-      --model_device "cuda:0" \
+      --model_device "cpu" \
       --config_preset "model_1_ptm" \
       --save_outputs \
       --cif_output \
-      --openfold_checkpoint_path $dataRoot/openfold_params/finetuning_ptm_2.pt
+      --openfold_checkpoint_path ~/git/openfold/openfold/resources/openfold_params/finetuning_ptm_2.pt
 fi
