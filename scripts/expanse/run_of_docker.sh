@@ -5,6 +5,8 @@ inDir=/home/jose/input_sequences
 outDir=/home/jose/output_models
 paramsDir=~/git/openfold/openfold/resources/openfold_params/
 
+echo "Start: $(date)"
+
 # Note '--gpus all' is required so that docker uses the nvidia container toolkit that makes cuda available to docker
 docker run \
 --gpus all \
@@ -21,6 +23,7 @@ python3 /opt/openfold/run_pretrained_openfold.py \
     --model_device "cuda:0" \
     --config_preset "model_1_ptm" \
     --save_outputs \
-    --openfold_checkpoint_path /params/finetuning_ptm_2.pt
+    --openfold_checkpoint_path /params/finetuning_ptm_2.pt \
+    --cif_output
 
-#    --cif_output \
+echo "Done:  $(date)"
