@@ -46,7 +46,7 @@ else
       $dataRoot/pdb_mmcif/mmcif_files/ \
       --use_precomputed_alignments $outDir/alignments/ \
       --output_dir $outDir \
-      --model_device "cpu" \
+      --model_device "cuda:0" \
       --config_preset "model_1_ptm" \
       --save_outputs \
       --cif_output \
