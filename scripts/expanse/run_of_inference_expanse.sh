@@ -13,6 +13,8 @@
 #SBATCH --partition=gpu-shared
 #SBATCH --mem=40G
 
+module load singularitypro/3.9
+
 echo "Start: $(date)"
-$(pwd)/run_of_inference.sh "$1"
+$(pwd)/run_of_singularity.sh
 echo "Done:  $(date)"
