@@ -9,11 +9,12 @@ paramsDir=~/git/openfold/openfold/resources/openfold_params/
 echo "Start: $(date)"
 
 # Note '--nv' is required so that singularity can use nvidia/cuda
-singularity exec --nv /home/jmduarte/openfold.sif \
+singularity exec --nv \
 --bind $dataRoot:$dataRoot \
 --bind $inDir:$inDir \
 --bind $outDir:$outDir \
 --bind $paramsDir:/params \
+/home/jmduarte/openfold.sif \
 python3 /opt/openfold/run_pretrained_openfold.py \
     $inDir \
     $dataRoot/pdb_mmcif/mmcif_files/ \
