@@ -12,6 +12,8 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --partition=gpu-shared
 #SBATCH --mem=40G
+# this is for the job to be able to use the Lustre filesystem (see https://www.sdsc.edu/support/user_guides/expanse.html)
+#SBATCH --constraint=lustre
 
 module load singularitypro/3.9
 
