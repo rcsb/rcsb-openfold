@@ -1,23 +1,25 @@
-#!/bin/sh
+#!/bin/bash
 
-dataRoot=/data/openfold
-inDir=/home/jose/input_sequences
-outDir=/home/jose/output_models
-paramsDir=~/git/openfold/openfold/resources/openfold_params/
+scripts_dir=$(dirname $0)
+source $scripts_dir/paths.sh
+
+# TODO extract constants to paths.sh
+inDir=/home/jmduarte/input_sequences
+outDir=/home/jmduarte/output_models
 
 
 echo "Start: $(date)"
 
 # Note '--nv' is required so that singularity can use nvidia/cuda
 singularity exec --nv \
---bind $dataRoot:$dataRoot \
+--bind $TEMPLATES_DIR:/templates \
 --bind $inDir:$inDir \
 --bind $outDir:$outDir \
---bind $paramsDir:/params \
-/home/jmduarte/openfold.sif \
+--bind $OF_PARAMS:/params \
+$OF_SIF_FILE \
 python3 /opt/openfold/run_pretrained_openfold.py \
     $inDir \
-    $dataRoot/pdb_mmcif/mmcif_files/ \
+    /templates \
     --use_precomputed_alignments $outDir/alignments/ \
     --output_dir $outDir \
     --model_device "cuda:0" \

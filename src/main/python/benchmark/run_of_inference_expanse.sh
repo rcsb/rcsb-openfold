@@ -21,8 +21,10 @@
 # this is for the job to be able to use the Lustre filesystem (see https://www.sdsc.edu/support/user_guides/expanse.html)
 #SBATCH --constraint=lustre
 
+scripts_dir=$(dirname $0)
+
 module load singularitypro/3.9
 
 echo "Start: $(date)"
-$(pwd)/run_of_singularity.sh
+$scripts_dir/run_of_singularity.sh
 echo "Done:  $(date)"
