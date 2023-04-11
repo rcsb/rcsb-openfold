@@ -1,11 +1,16 @@
 #!/bin/bash
 
-scripts_dir=$(dirname $0)
-source $scripts_dir/paths.sh
+DATA_ROOT=/expanse/lustre/projects/sds194/jmduarte
+OF_PARAMS=$DATA_ROOT/openfold_params
+TEMPLATES_DIR=$DATA_ROOT/pdb_mmcif/mmcif_files
+OF_SIF_FILE=$DATA_ROOT/singularity/openfold.sif
 
-# TODO extract constants to paths.sh
-inDir=/home/jmduarte/input_sequences
-outDir=/home/jmduarte/output_models
+seqsDirSing=/input/sequences
+seqsDirHost=${DATA_ROOT}${seqsDirSing}
+alnDirSing=/input/alignments
+alnDirHost=${DATA_ROOT}$alnDirSing
+outDirSing=/output_models
+outDirHost=${DATA_ROOT}${outDirSing}
 
 
 echo "Start: $(date)"
@@ -13,15 +18,16 @@ echo "Start: $(date)"
 # Note '--nv' is required so that singularity can use nvidia/cuda
 singularity exec --nv \
 --bind $TEMPLATES_DIR:/templates \
---bind $inDir:$inDir \
---bind $outDir:$outDir \
+--bind $seqsDirHost:$seqsDirSing \
+--bind $outDirHost:$outDirSing \
+--bind $alnDirHost:$alnDirSing \
 --bind $OF_PARAMS:/params \
 $OF_SIF_FILE \
 python3 /opt/openfold/run_pretrained_openfold.py \
-    $inDir \
+    $seqsDirSing \
     /templates \
-    --use_precomputed_alignments $outDir/alignments/ \
-    --output_dir $outDir \
+    --use_precomputed_alignments $alnDirSing \
+    --output_dir $outDirSing \
     --model_device "cuda:0" \
     --config_preset "model_1_ptm" \
     --save_outputs \
