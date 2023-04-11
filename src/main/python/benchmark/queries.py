@@ -26,6 +26,17 @@ search_query = """
       },
       {
         "type": "terminal",
+        "label": "text",
+        "service": "text",
+        "parameters": {
+          "attribute": "rcsb_entry_info.assembly_count",
+          "operator": "equals",
+          "negation": false,
+          "value": 1
+        }
+      },
+      {
+        "type": "terminal",
         "service": "text",
         "parameters": {
           "attribute": "rcsb_assembly_info.polymer_entity_instance_count",
@@ -97,6 +108,10 @@ ids_query = """
     rcsb_id
     entity_poly{
       pdbx_seq_one_letter_code_can
+    }
+    rcsb_polymer_entity_container_identifiers {
+      auth_asym_ids
+      entity_id
     }
 
   }

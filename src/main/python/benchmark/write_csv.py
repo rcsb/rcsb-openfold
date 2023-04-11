@@ -6,4 +6,4 @@ def write_csv_file(file, data):
 def create_csv_file(file):
     with open(file, 'w') as csvfile: 
         print("IDs table created")
-        csvfile.write("IDs,sequence \n")
+        csvfile.write("ID,chainID,sequence \n")
