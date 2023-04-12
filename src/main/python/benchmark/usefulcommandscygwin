@@ -1,0 +1,3 @@
+rsync -r /cygdrive/d/data/openfold/openproteinset/pdb/1bkl_A amazamontesinos@login.expanse.sdsc.edu:~/output_models
+
+rsync -r amazamontesinos@login.expanse.sdsc.edu:~/output_models/predictions /cygdrive/c/Users/alvar/Desktop/PDB/
