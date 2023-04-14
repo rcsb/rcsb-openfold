@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  template:
+    spec:
+      containers:
+        - name: pi
+          # TODO generic ubuntu image?
+          image: perl
+          # TODO use a raw github url to get download_data.sh and execute it directly from http
+          command: ["perl",  "-wle", "print 'hola clase'"]
+          resources:
+            limits:
+              memory: 200Mi
+              cpu: 1
+            requests:
+              memory: 50Mi
+              cpu: 50m
+      restartPolicy: Never
+  backoffLimit: 4
