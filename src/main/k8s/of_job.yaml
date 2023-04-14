@@ -1,0 +1,46 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: openfold-k8s
+# TODO storage, including download of data to storage (/input/alignments, /input/sequences, /templates, /params)
+# TODO GPU requirements (see Scheduling in tutorial)
+spec:
+  template:
+    spec:
+      containers:
+        - name: openfold-k8s
+          image: gitlab-registry.nrp-nautilus.io/josemduarte/test-project:latest
+          command:
+            - "python3"
+          args:
+            - /opt/openfold/run_pretrained_openfold.py
+            - /ofvol/input/sequences
+            - /ofvol/templates
+            - --use_precomputed_alignments
+            - /ofvol/input/alignments
+            - --output_dir
+            - /ofvol/output_models
+            - --model_device
+            - "cuda:0"
+            - --config_preset
+            - "model_1_ptm"
+            - --save_outputs
+            - --openfold_checkpoint_path
+            - /ofvol/params/finetuning_ptm_2.pt
+            - --cif_output
+          resources:
+            limits:
+              memory: 200Mi
+              cpu: "1"
+            requests:
+              memory: 50Mi
+              cpu: 50m
+          volumeMounts:
+            - mountPath: /ofvol
+              name: ofvol
+      volumes:
+        - name: ofvol
+          persistentVolumeClaim:
+            claimName: openfold-vol
+      restartPolicy: Never
+  backoffLimit: 3
