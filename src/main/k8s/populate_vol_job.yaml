@@ -1,21 +1,29 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: pi
+  name: populate-of-data-job
 spec:
   template:
     spec:
       containers:
-        - name: pi
+        - name: populate-of-data
           # we need aws cli for openfold params and for alignments
           image: amazon/aws-cli
-          command: ["source", "<(curl -s https://raw.githubusercontent.com/rcsb/rcsb-openfold/nautilus/src/main/k8s/download_data.sh)"]
+          command: ["/bin/bash", "-c"]
+          args: ["source <(curl -s https://raw.githubusercontent.com/rcsb/rcsb-openfold/nautilus/src/main/k8s/download_data.sh) && ls /ofvol"]
           resources:
             limits:
-              memory: 200Mi
+              memory: 1Gi
               cpu: "1"
             requests:
-              memory: 50Mi
-              cpu: 50m
+              memory: 1Gi
+              cpu: "1"
+          volumeMounts:
+            - mountPath: /ofvol
+              name: ofvol
+      volumes:
+        - name: ofvol
+          persistentVolumeClaim:
+            claimName: openfold-vol
       restartPolicy: Never
-  backoffLimit: 4
+  backoffLimit: 3
