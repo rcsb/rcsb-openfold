@@ -22,6 +22,7 @@ aws s3 cp --no-sign-request --region us-east-1 s3://openfold/pdb/$pdb_id/a3m "${
 aws s3 cp --no-sign-request --region us-east-1 s3://openfold/pdb/$pdb_id/hhr "${inputalns_dir}/$pdb_id" --recursive
 
 # inputs
+echo "Writing input sequence to $inputseqs_dir"
 cat > $inputseqs_dir/${pdb_id}.fasta <<EOF
 >1ueb |Chains A, B|elongation factor P|Thermus thermophilus (274)
 MISVTDLRPGTKVKMDGGLWECVEYQHQKLGRGGAKVVAKFKNLETGATVERTFNSGEKLEDIYVETRELQYLYPEGEEMVFMDLETYEQFAVPRSRVVGAEFFKEGMTALGDMYEGQPIKVTPPTVVELKVVDTPPGVRGDTVSGGSKPATLETGAVVQVPLFVEPGEVIKVDTRTGEYVGRA
