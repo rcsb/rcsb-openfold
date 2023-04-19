@@ -22,9 +22,18 @@ aws s3 cp --no-sign-request --region us-east-1 s3://openfold/pdb/$pdb_id/a3m "${
 aws s3 cp --no-sign-request --region us-east-1 s3://openfold/pdb/$pdb_id/hhr "${inputalns_dir}/$pdb_id" --recursive
 
 # inputs
-cat > $inputalns_dir/${pdb_id}.fasta <<EOF
+cat > $inputseqs_dir/${pdb_id}.fasta <<EOF
 >1ueb |Chains A, B|elongation factor P|Thermus thermophilus (274)
 MISVTDLRPGTKVKMDGGLWECVEYQHQKLGRGGAKVVAKFKNLETGATVERTFNSGEKLEDIYVETRELQYLYPEGEEMVFMDLETYEQFAVPRSRVVGAEFFKEGMTALGDMYEGQPIKVTPPTVVELKVVDTPPGVRGDTVSGGSKPATLETGAVVQVPLFVEPGEVIKVDTRTGEYVGRA
 >1ueb |Chains A, B|elongation factor P|Thermus thermophilus (274)
 MISVTDLRPGTKVKMDGGLWECVEYQHQKLGRGGAKVVAKFKNLETGATVERTFNSGEKLEDIYVETRELQYLYPEGEEMVFMDLETYEQFAVPRSRVVGAEFFKEGMTALGDMYEGQPIKVTPPTVVELKVVDTPPGVRGDTVSGGSKPATLETGAVVQVPLFVEPGEVIKVDTRTGEYVGRA
 EOF
+
+# templates
+# these correspond to the first 5 hhnlits hits of 1ueb
+ids="6rk3 6s8z 6rji 3tre 3a5z"
+for id in $ids
+do
+  echo "Downloading $id cif file"
+  curl "https://files.rcsb.org/download/$id.cif" > $templ_dir/$id.cif
+done
