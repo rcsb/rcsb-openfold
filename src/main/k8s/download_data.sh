@@ -32,8 +32,8 @@ $seq
 EOF
 
 # templates
-# these correspond to the first 5 hhnlits hits of 1ueb
-ids="6rk3 6s8z 6rji 3tre 3a5z"
+# these correspond to the all 100% hhnlits hits of 1ueb
+ids="6rk3 6s8z 6rji 3tre 3a5z 5j3b 3oyy 6enj 6j7m 1yby"
 for id in $ids
 do
   echo "Downloading $id cif file"
